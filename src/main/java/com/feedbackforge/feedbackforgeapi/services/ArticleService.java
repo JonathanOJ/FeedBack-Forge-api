@@ -11,9 +11,6 @@ import com.feedbackforge.feedbackforgeapi.repositories.ArticleRepository;
 @Service
 public class ArticleService {
     
-    // @Autowired
-    // private UserRepository userRepository;
-    
     @Autowired
     private ArticleRepository articleRepository;
 

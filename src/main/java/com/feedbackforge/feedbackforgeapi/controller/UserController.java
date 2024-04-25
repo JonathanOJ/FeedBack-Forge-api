@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -60,6 +61,12 @@ public class UserController {
     public User login(@RequestBody User user) {
         return this.userService.login(user);
     }
+
+    @GetMapping("/findAllByRole/{role}")
+    public Iterable<User> getMethodName(@PathVariable String role) {
+        return this.userService.findAllByRole(role);
+    }
+    
     
 
 }

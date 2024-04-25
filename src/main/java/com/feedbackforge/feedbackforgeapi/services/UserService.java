@@ -1,6 +1,7 @@
 package com.feedbackforge.feedbackforgeapi.services;
 
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +68,11 @@ public class UserService {
         }
 
         return findUser.orElseThrow(() -> new RuntimeException("User not found!"));
+    }
+
+    public Iterable<User> findAllByRole(String role) {
+        Optional<Iterable<User>> users = Optional.ofNullable(this.userRepository.findAllByRole(role));
+
+        return users.orElseThrow(() -> new RuntimeException("Evaluators not found!"));
     }
 }

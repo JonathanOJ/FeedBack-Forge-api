@@ -23,6 +23,9 @@ public class Article {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "authors", nullable = false)
+    private String authors;
+
     @Column(name = "resume", nullable = false)
     private String resume;
 
@@ -116,6 +119,14 @@ public class Article {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String authors) {
+        this.authors = authors;
     }
 
 }

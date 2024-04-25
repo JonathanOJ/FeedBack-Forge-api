@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,11 +18,13 @@ public class Avaliation {
     @Column(name = "id", unique = true)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private String user_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "article_id", nullable = false)
-    private String article_id;
+    @ManyToOne
+    @JoinColumn(name = "article_id", nullable = false)
+    private Article article;
 
     @Column(name = "nota")
     private int nota;
@@ -32,9 +36,10 @@ public class Avaliation {
     public Avaliation() {
     }
 
-    public Avaliation(String user_id, String article_id, int nota, boolean avaliated) {
-        this.user_id = user_id;
-        this.article_id = article_id;
+    public Avaliation(Long id, User user, Article article, int nota, boolean avaliated) {
+        this.id = id;
+        this.user = user;
+        this.article = article;
         this.nota = nota;
         this.avaliated = avaliated;
     }
@@ -64,20 +69,20 @@ public class Avaliation {
         this.avaliated = avaliated;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getArticle_id() {
-        return article_id;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setArticle_id(String article_id) {
-        this.article_id = article_id;
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
 
