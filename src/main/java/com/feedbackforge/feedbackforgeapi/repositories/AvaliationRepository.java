@@ -15,6 +15,9 @@ public interface AvaliationRepository extends JpaRepository<Avaliation, Long>{
 
     @Query("FROM Avaliation a WHERE a.user.id = :userId")
     List<Avaliation> findAllByUserId(Long userId);
+
+    @Query("FROM Avaliation a WHERE a.article.id = :articleId")
+    List<Avaliation> findAllByArticleId(Long articleId);
     
 
 

@@ -35,21 +35,29 @@ public class AvaliationService {
     }
 
     @Transactional
-    public Avaliation saveRate(Avaliation avaliation) {
-        Avaliation aval = avaliation;
-        avaliation.setAvaliated(true);
-        avaliation = this.avaliationRepository.save(avaliation);
+    public Avaliation saveRate(Avaliation receivedAvaliation) {
+        Avaliation avaliationToSave = receivedAvaliation;
+        receivedAvaliation.setAvaliated(true);
+        receivedAvaliation = this.avaliationRepository.save(receivedAvaliation);
 
-        this.articleRepository.findById(avaliation.getArticle().getId()).ifPresent(article -> {
-            if(article.getNota() == 0) {
-                article.setNota(aval.getNota());
-            } else {
-                article.setNota((article.getNota() + aval.getNota()) );
+        List<Avaliation> avaliations = avaliationRepository.findAllByArticleId(avaliationToSave.getArticle().getId());
+        Integer finalNota = 0;
+        Boolean allAvaliated = true;
+
+        for(Avaliation avali : avaliations) {
+            if (avali.getAvaliated() == false) {
+                allAvaliated = false;
+                break;
             }
-            this.articleRepository.save(article);
-        });
+            finalNota += avali.getNota();
+        }
+
+        if (allAvaliated) {
+            avaliationToSave.getArticle().setNota(finalNota / avaliations.size());
+            this.articleRepository.save(avaliationToSave.getArticle());
+        }
         
-        return avaliation;
+        return receivedAvaliation;
     }
     
     public Iterable<Avaliation> findAll() {

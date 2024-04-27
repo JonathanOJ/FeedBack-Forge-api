@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.feedbackforge.feedbackforgeapi.services.ArticleService;
 
+
 @RestController
 @RequestMapping("/article")
 @Validated
@@ -29,6 +30,11 @@ public class ArticleController {
     @GetMapping("/findAll")
     public List<Article> findAll() {
         return (List<Article>) this.articleService.findAll();
+    }
+
+    @GetMapping("/findAllByUsuId/{id}")
+    public List<Article> findAllByUsuId(@PathVariable Long id) {
+        return (List<Article>) this.articleService.findAllByUsuId(id);
     }
 
     @GetMapping("/{id}")
@@ -52,6 +58,10 @@ public class ArticleController {
         this.articleService.delete(id);
     }
 
+    @GetMapping("/findAllToPublish")
+    public List<Article> findAllToPublish() {
+        return (List<Article>) this.articleService.findAllToPublish();
+    }
 
     
 }

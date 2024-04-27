@@ -129,4 +129,65 @@ public class Article {
         this.authors = authors;
     }
 
+
+    @Override
+    public String toString() {
+        return "Article [authors=" + authors + ", date=" + date + ", id=" + id + ", link=" + link + ", nota=" + nota
+                + ", resume=" + resume + ", status=" + status + ", title=" + title + ", user=" + user + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Article other = (Article) obj;
+        if (authors == null) {
+            if (other.authors != null)
+                return false;
+        } else if (!authors.equals(other.authors))
+            return false;
+        if (date == null) {
+            if (other.date != null)
+                return false;
+        } else if (!date.equals(other.date))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (link == null) {
+            if (other.link != null)
+                return false;
+        } else if (!link.equals(other.link))
+            return false;
+        if (nota != other.nota)
+            return false;
+        if (resume == null) {
+            if (other.resume != null)
+                return false;
+        } else if (!resume.equals(other.resume))
+            return false;
+        if (status == null) {
+            if (other.status != null)
+                return false;
+        } else if (!status.equals(other.status))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (user == null) {
+            if (other.user != null)
+                return false;
+        } else if (!user.equals(other.user))
+            return false;
+        return true;
+    }
+
 }
