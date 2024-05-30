@@ -1,12 +1,14 @@
 package com.feedbackforge.feedbackforgeapi.services;
 
 import java.util.Optional;
-
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.feedbackforge.feedbackforgeapi.models.User;
+import com.feedbackforge.feedbackforgeapi.models.enums.ProfileEnum;
 import com.feedbackforge.feedbackforgeapi.repositories.UserRepository;
 
 @Service
@@ -15,10 +17,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     
-    // @Autowired
-    // private ArticleRepository articleRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    
     public User findById(Long id) {
         Optional<User> user = this.userRepository.findById(id);
         
@@ -27,8 +28,9 @@ public class UserService {
     
     @Transactional
     public User save(User user) {
-        System.out.println(user);
         user.setId(null);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setProfiles(Set.of(ProfileEnum.USER.getCode()));
         user = this.userRepository.save(user);
         
         return user;
@@ -36,6 +38,7 @@ public class UserService {
     
     @Transactional
     public User update(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return this.userRepository.save(user);
     }
 
@@ -58,16 +61,6 @@ public class UserService {
         
         
         return user.orElseThrow(() -> new RuntimeException("User not found! email: " + email));
-    }
-
-    public User login(User user) {
-        Optional<User> findUser = Optional.ofNullable(findUserByEmail(user.getEmail()));
-
-        if (!findUser.isPresent() || !findUser.get().getPassword().equals(user.getPassword())) {
-            throw new RuntimeException("Invalid email or password!");
-        }
-
-        return findUser.orElseThrow(() -> new RuntimeException("User not found!"));
     }
 
     public Iterable<User> findAllByRole(String role) {

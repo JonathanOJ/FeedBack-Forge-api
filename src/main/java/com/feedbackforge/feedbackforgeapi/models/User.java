@@ -1,12 +1,20 @@
 package com.feedbackforge.feedbackforgeapi.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.feedbackforge.feedbackforgeapi.models.enums.ProfileEnum;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +45,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Article> articles = new ArrayList<Article>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @CollectionTable(name = "user_profile")
+    @Column(name = "profile", nullable = false)
+    private Set<Integer> profiles = new HashSet<>();
+
     public User() {
     }
 
@@ -45,6 +59,20 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+
+    }
+
+    @JsonIgnore
+    public Set<ProfileEnum> getProfiles() {
+        return this.profiles.stream().map(x -> ProfileEnum.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    public void setProfiles(Set<Integer> profiles) {
+        this.profiles = profiles;
+    }
+
+    public void addProfile(ProfileEnum profile) {
+        this.profiles.add(profile.getCode());
     }
 
     public Long getId() {
