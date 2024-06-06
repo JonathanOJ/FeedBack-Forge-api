@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.feedbackforge.feedbackforgeapi.models.Task;
 import com.feedbackforge.feedbackforgeapi.services.TaskService;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,9 +29,9 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/findAll")
-    public List<Task> findAll() {
-        return (List<Task>) this.taskService.findAll();
+    @GetMapping("/findAll/{id}")
+    public Iterable<Task> findAll(@PathVariable Long id) {
+        return (Iterable<Task>) this.taskService.findAll(id);
     }
 
     @GetMapping("/{id}")
@@ -50,6 +48,7 @@ public class TaskController {
 
     @PostMapping("/save")
     public Task save(@RequestBody Task task) {
+        System.out.println(task);
         return this.taskService.save(task);
     }
 

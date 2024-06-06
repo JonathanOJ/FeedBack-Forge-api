@@ -30,7 +30,13 @@ public class UserService {
     public User save(User user) {
         user.setId(null);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setProfiles(Set.of(ProfileEnum.USER.getCode()));
+
+        if(user.getRole().equals("admin")){
+            user.setProfiles(Set.of(ProfileEnum.ADMIN.getCode()));
+        } else {
+            user.setProfiles(Set.of(ProfileEnum.USER.getCode()));
+        }
+        
         user = this.userRepository.save(user);
         
         return user;

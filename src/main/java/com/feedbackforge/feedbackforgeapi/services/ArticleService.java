@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.feedbackforge.feedbackforgeapi.models.Article;
 import com.feedbackforge.feedbackforgeapi.models.Avaliation;
+import com.feedbackforge.feedbackforgeapi.models.User;
+import com.feedbackforge.feedbackforgeapi.models.enums.ProfileEnum;
 import com.feedbackforge.feedbackforgeapi.repositories.ArticleRepository;
 import com.feedbackforge.feedbackforgeapi.repositories.AvaliationRepository;
 
@@ -20,6 +22,9 @@ public class ArticleService {
     
     @Autowired
     private AvaliationRepository avaliationRepository;
+
+    @Autowired
+    private UserService userService;
 
     
     public Article findById(Long id) {
@@ -57,8 +62,14 @@ public class ArticleService {
         }
     }
 
-    public Iterable<Article> findAll() {
-        return this.articleRepository.findAll();
+    public Iterable<Article> findAll(Long id) {
+        User user = userService.findById(id);
+
+        if (user.getProfiles().contains(ProfileEnum.ADMIN)) {
+            return this.articleRepository.findAll();
+        } else {
+            return this.articleRepository.findAllByUsuId(id);
+        }
     }
 
     public Iterable<Article> findAllToPublish() {

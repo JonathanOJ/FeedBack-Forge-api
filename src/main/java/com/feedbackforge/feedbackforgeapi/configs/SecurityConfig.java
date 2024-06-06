@@ -56,7 +56,10 @@ public class SecurityConfig {
         this.authenticationManager = authenticationManagerBuilder.build();
            
         http.authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
+            .requestMatchers(HttpMethod.POST, "/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/**").permitAll()
+            .requestMatchers(HttpMethod.DELETE, "/**").permitAll()
+            .requestMatchers(HttpMethod.PUT, "/**").permitAll()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .anyRequest().authenticated()).authenticationManager(authenticationManager);
             

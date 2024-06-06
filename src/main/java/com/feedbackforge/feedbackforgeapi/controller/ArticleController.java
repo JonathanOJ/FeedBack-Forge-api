@@ -27,9 +27,9 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @GetMapping("/findAll")
-    public List<Article> findAll() {
-        return (List<Article>) this.articleService.findAll();
+    @GetMapping("/findAll/{id}")
+    public List<Article> findAll(@PathVariable Long id) {
+        return (List<Article>) this.articleService.findAll(id);
     }
 
     @GetMapping("/findAllByUsuId/{id}")

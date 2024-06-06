@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.feedbackforge.feedbackforgeapi.models.Task;
+import com.feedbackforge.feedbackforgeapi.models.User;
+import com.feedbackforge.feedbackforgeapi.models.enums.ProfileEnum;
 import com.feedbackforge.feedbackforgeapi.repositories.TaskRepository;
 
 @Service
@@ -13,6 +15,9 @@ public class TaskService {
     
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired  
+    private UserService userService;
 
     
     public Task findById(Long id) {
@@ -44,8 +49,14 @@ public class TaskService {
         }
     }
 
-    public Iterable<Task> findAll() {
-        return this.taskRepository.findAll();
+    public Iterable<Task> findAll(Long id) {
+        User user = userService.findById(id);
+
+        if (user.getProfiles().contains(ProfileEnum.ADMIN)) {
+            return this.taskRepository.findAll();
+        } else {
+            return this.taskRepository.findAllByUser(id);
+        }
     }
 
     public Iterable<Task> findAllByUser(Long userId) {

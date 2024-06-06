@@ -21,6 +21,12 @@ public class Task {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "status", nullable = false)
+    private String status;
+
     @Column(name = "itens", nullable = false)
     private String itens;
 
@@ -28,8 +34,16 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Task(String title) {
+    public Task(){
+
+    }
+
+    public Task(String title, String description, String status, String itens, User user){
         this.title = title;
+        this.description = description;
+        this.status = status;
+        this.itens = itens;
+        this.user = user;
     }
 
     public Long getId() {
@@ -64,5 +78,19 @@ public class Task {
         this.user = user;
     }
 
+    public String getDescription(){
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getStatus(){
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
