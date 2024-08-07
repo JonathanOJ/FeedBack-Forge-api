@@ -47,6 +47,18 @@ public class UserController {
         return this.userService.save(user);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        return userService.register(user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) {
+
+       return userService.login(user);
+
+    } 
+
     @PostMapping("/update")
     public User update(@RequestBody User user) {
         return this.userService.update(user);

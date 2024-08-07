@@ -1,5 +1,4 @@
 package com.feedbackforge.feedbackforgeapi.configs;
-
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +38,13 @@ public class SecurityConfig {
     private JWTUtil jwtUtil;
 
     private static final String[] PUBLIC_MATCHERS_POST = {
-        "/login",
-        "/user/save"
+        "/user/register",
+        "/user/login"
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable());      
+        http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http
             .getSharedObject(AuthenticationManagerBuilder.class);
@@ -54,18 +53,13 @@ public class SecurityConfig {
             .passwordEncoder(bCryptPasswordEncoder());
 
         this.authenticationManager = authenticationManagerBuilder.build();
-           
+
         http.authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.POST, "/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/**").permitAll()
-            .requestMatchers(HttpMethod.DELETE, "/**").permitAll()
-            .requestMatchers(HttpMethod.PUT, "/**").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
             .anyRequest().authenticated()).authenticationManager(authenticationManager);
-            
+
         http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
-        http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, this.jwtUtil,
-            this.userDetailsService));
+        http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, this.jwtUtil, this.userDetailsService));
 
         http.sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -82,11 +76,11 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
         configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+        configuration.addAllowedOrigin("http://localhost:4200");
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
